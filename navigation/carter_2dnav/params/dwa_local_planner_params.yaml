@@ -1,0 +1,59 @@
+DWAPlannerROS:
+
+# Robot Configuration Parameters
+  max_vel_x: 1.2 # the maximum linear velocity
+  min_vel_x: -1.2 # the minimum linear velocity
+
+  max_vel_y: 0.0 
+  min_vel_y: 0.0 
+
+# The velocity when robot is moving in a straight line
+  max_vel_trans: 1.2 # the maximum translational velocity
+  min_vel_trans: 0.1 # the minimum translational velocity
+
+  max_vel_theta:  1.5
+  min_vel_theta:  -1.5 #Adjust the minimum angular velocity (increase if necessary) 
+
+  acc_lim_x: 1.0 # the maximum linear acceleration
+  acc_lim_y: 0.0 
+  acc_lim_theta: 3.0 # the maximum angular acceleration
+  acc_lim_trans: 1.0
+  
+  theta_stopped_vel: 0.1
+  trans_stopped_vel: 0.1
+
+
+# goal tolerance parameters
+  xy_goal_tolerance: 0.2 # the XY goal tolerance
+  yaw_goal_tolerance: 0.2 # the yaw goal tolerance
+
+# Forward simulation parameters
+  sim_time: 2.0
+  sim_granularity: 0.1 # the simulation granularity
+  angular_sim_granularity: 0.1
+  vx_samples: 21
+  vy_samples: 1 
+  vth_samples: 20 # the number of angular velocity samples
+  controller_frequency: 20.0 # defines the sim_period
+
+# Trajectory scoring parameters
+  path_distance_bias: 32.0
+  goal_distance_bias: 32.0
+  occdist_scale: 0.02
+  twirling_scale: 0.0
+  stop_time_buffer: 0.2
+  forward_point_distance: 0.325
+  scaling_speed: 0.5
+  max_scaling_factor: 0.5
+
+# Oscillation prevention parameters
+  oscillation_reset_dist: 0.1 # the oscillation reset distance
+  oscillation_reset_angle: 0.2
+  
+# global plan parameters
+  prune_plan: true
+
+# Debugging
+  publish_traj_pc: true
+  publish_cost_grid_pc: true
+
