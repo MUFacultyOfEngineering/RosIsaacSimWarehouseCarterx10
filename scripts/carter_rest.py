@@ -248,7 +248,7 @@ def move_all_robots_random_position():
             # Get random position coordinates
             x = random.uniform(MAP_MIN_X, MAP_MAX_X)
             y = random.uniform(MAP_MIN_Y, MAP_MAX_Y)
-            collision = any(distance(x, y, pos[0], pos[1]) < 1.0 for pos in positions) or any(distance(x, y, pos[0], pos[1]) < 1.0 for pos in POS_OBSTACLES)
+            collision = any(distance(x, y, pos[0], pos[1]) < 2.0 for pos in positions) or robot_will_collide_obstacles(x, y)
 
         # Add the position to the list
         positions.append((x, y))
@@ -302,6 +302,12 @@ def move_desired_position_recovery_strategy():
 
     return get_state(robot_id)
     
+def robot_will_collide_obstacles(x, y):        
+    #check the robot wont collide with obstacles
+    collision = any(distance(x, y, pos[0], pos[1]) < 1.5 for pos in POS_OBSTACLES)
+    return collision
+        
+    
 def thread_mdprs(robot_id, xd, yd):
     success = False
     metersToMove = 2.5
@@ -320,15 +326,26 @@ def thread_mdprs(robot_id, xd, yd):
         if (distance < metersToConsiderLost):
             metersToMove = metersToMove - 0.5
         
-        if (xcp > xd):
-            xr = xcp - metersToMove
-        elif (xcp < xd):
-            xr = xcp + metersToMove
+        collision = True
+        while collision:
+            if (xcp > xd):
+                xr = xcp - metersToMove
+            elif (xcp < xd):
+                xr = xcp + metersToMove
+                
+            if (ycp > yd):
+                yr = ycp - metersToMove
+            elif (ycp < yd):
+                yr = ycp + metersToMove
             
-        if (ycp > yd):
-            yr = ycp - metersToMove
-        elif (ycp < yd):
-            yr = ycp + metersToMove
+            #check the robot wont collide with obstacles
+            collision = robot_will_collide_obstacles(xr, yr)            
+            
+            #if the robot will collide, increment meters to move by 0.2 and try again
+            if (collision):
+                metersToMove = metersToMove + 0.2
+                
+            print(f"collision: {collision} metersToMove: {metersToMove}")
         
         msg = f"Recovery strategy. Moving robot_{robot_id} close to desired position at [{xr}, {yr}]"
         print(msg)
